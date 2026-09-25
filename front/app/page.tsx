@@ -6,7 +6,7 @@ import { ChatSimulator } from '@/src/components/ChatSimulator'
 import { DashboardAgenda } from '@/src/components/DashboardAgenda'
 
 const CONTACT_EMAIL =
-  process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'juan@turniate.com'
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'juangaillour.8@gmail.com'
 
 export default function Page() {
   const [showEnd, setShowEnd] = useState(false)

@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Clock, Radio, RotateCcw } from 'lucide-react'
 import {
-  API_BASE_URL,
+  fetchApi,
   supabase,
   TURNOS_SYNC_EVENT,
   type Recurso,
@@ -139,7 +139,7 @@ export function DashboardAgenda() {
 
   const cargarAgendaInicial = useCallback(async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/turnos`)
+      const res = await fetchApi('/api/turnos')
       if (res.ok) {
         const data = await res.json()
         if (Array.isArray(data.recursos) && data.recursos.length > 0) {
@@ -270,7 +270,7 @@ export function DashboardAgenda() {
     nombreCliente?: string
   ) {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/turnos/manual`, {
+      const res = await fetchApi('/api/turnos/manual', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -298,23 +298,43 @@ export function DashboardAgenda() {
         return
       }
     } catch {
-      setTurnos((prev) =>
-        prev.map((t) =>
-          t.id === turnoId
-            ? {
-                ...t,
-                estado: nuevoEstado,
-                nombre_cliente:
-                  nuevoEstado === 'ocupado'
-                    ? nombreCliente || 'Reserva Manual'
-                    : null,
-              }
-            : t
-        )
-      )
-      if (nuevoEstado === 'ocupado') {
-        triggerHighlight(turnoId, false)
+      // Si el backend FastAPI no está alcanzable (ej. celular fuera de red local),
+      // actualizamos directamente en Supabase y en el estado local
+    }
+
+    if (supabase) {
+      try {
+        await supabase
+          .from('turnos')
+          .update({
+            estado: nuevoEstado,
+            nombre_cliente:
+              nuevoEstado === 'ocupado'
+                ? nombreCliente || 'Reserva Manual'
+                : null,
+          })
+          .eq('id', turnoId)
+      } catch {
+        // Continúa al fallback en memoria
       }
+    }
+
+    setTurnos((prev) =>
+      prev.map((t) =>
+        t.id === turnoId
+          ? {
+              ...t,
+              estado: nuevoEstado,
+              nombre_cliente:
+                nuevoEstado === 'ocupado'
+                  ? nombreCliente || 'Reserva Manual'
+                  : null,
+            }
+          : t
+      )
+    )
+    if (nuevoEstado === 'ocupado') {
+      triggerHighlight(turnoId, false)
     }
   }
 
@@ -322,7 +342,7 @@ export function DashboardAgenda() {
     setIsResetting(true)
     setHighlightedTurnoId(null)
     try {
-      const res = await fetch(`${API_BASE_URL}/api/reset`, { method: 'POST' })
+      const res = await fetchApi('/api/reset', { method: 'POST' })
       if (res.ok) {
         const data = await res.json()
         if (Array.isArray(data.turnos)) {
@@ -343,12 +363,14 @@ export function DashboardAgenda() {
             }))
           )
         }
+        return
       }
     } catch {
-      setTurnos(FALLBACK_TURNOS)
+      // Fallback directo a estado semilla
     } finally {
       setIsResetting(false)
     }
+    setTurnos(FALLBACK_TURNOS)
   }
 
   const turnosFiltrados = useMemo(() => {

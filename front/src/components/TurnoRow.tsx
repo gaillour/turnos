@@ -127,7 +127,7 @@ export function TurnoRow({
             type="button"
             disabled={isSaving}
             onClick={handleLiberarTurno}
-            className="inline-flex items-center gap-1 rounded-lg border border-[#7bc94c] bg-white px-2.5 py-1 text-[11px] font-semibold text-[#286b07] shadow-2xs transition hover:bg-[#f4fdef] disabled:opacity-50"
+            className="inline-flex cursor-pointer touch-manipulation items-center gap-1 rounded-lg border border-[#7bc94c] bg-white px-3 py-1.5 text-xs font-semibold text-[#286b07] shadow-2xs transition hover:bg-[#f4fdef] active:scale-95 disabled:opacity-50 sm:px-2.5 sm:py-1 sm:text-[11px]"
           >
             <RotateCcw size={11} />
             Liberar
@@ -143,12 +143,12 @@ export function TurnoRow({
               value={manualName}
               onChange={(e) => setManualName(e.target.value)}
               placeholder="Nombre del cliente..."
-              className="min-w-0 flex-1 rounded-lg border border-[#72bf44] bg-white px-2.5 py-1 text-xs text-[#202320] outline-none focus:ring-2 focus:ring-[#58cc1c]"
+              className="min-w-0 flex-1 rounded-lg border border-[#72bf44] bg-white px-2.5 py-1.5 text-base text-[#202320] outline-none focus:ring-2 focus:ring-[#58cc1c] sm:py-1 sm:text-xs"
             />
             <button
               type="submit"
               disabled={isSaving}
-              className="rounded-lg bg-[#38940b] px-2.5 py-1 text-xs font-bold text-white hover:bg-[#2c7508] disabled:opacity-50"
+              className="cursor-pointer touch-manipulation rounded-lg bg-[#38940b] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#2c7508] active:scale-95 disabled:opacity-50 sm:px-2.5 sm:py-1"
             >
               Guardar
             </button>
@@ -158,7 +158,7 @@ export function TurnoRow({
                 setIsEditingManual(false)
                 setManualName('')
               }}
-              className="grid size-6 shrink-0 place-items-center rounded-lg text-[#728071] hover:bg-[#e7eee5]"
+              className="grid size-7 shrink-0 cursor-pointer touch-manipulation place-items-center rounded-lg text-[#728071] hover:bg-[#e7eee5] sm:size-6"
             >
               <X size={13} />
             </button>
@@ -167,7 +167,7 @@ export function TurnoRow({
           <button
             type="button"
             onClick={() => setIsEditingManual(true)}
-            className="inline-flex items-center gap-1 rounded-lg bg-[#38940b] px-3 py-1 text-[11px] font-bold text-white shadow-2xs transition hover:bg-[#2c7508]"
+            className="inline-flex cursor-pointer touch-manipulation items-center gap-1 rounded-lg bg-[#38940b] px-3.5 py-1.5 text-xs font-bold text-white shadow-2xs transition hover:bg-[#2c7508] active:scale-95 sm:px-3 sm:py-1 sm:text-[11px]"
           >
             <UserPlus size={11} />
             Ocupar
