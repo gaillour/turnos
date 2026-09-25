@@ -1,0 +1,32 @@
+# Carpetas internas de contexto
+antigravity/
+
+# Variables de entorno y secretos (NUNCA subir)
+.env
+.env.*
+back/.env
+front/.env.local
+front/.env
+
+# Entornos virtuales y caché de Python
+.venv/
+venv/
+back/.venv/
+back/venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Dependencias y build de Next.js / Node
+node_modules/
+front/node_modules/
+.next/
+front/.next/
+out/
+front/out/
+*.tsbuildinfo
+front/next-env.d.ts
+
+# Sistema y editores
+.DS_Store
+*.log
